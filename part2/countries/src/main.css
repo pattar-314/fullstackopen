@@ -1,0 +1,21 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: lightgrey;
+}
+
+.country-name {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.lang-list {
+  margin-top: 3em;
+}
+
+.country-flag {
+font-size: 10em;
+}

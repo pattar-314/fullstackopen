@@ -1,3 +1,19 @@
 body {
   background-color: gray;
 }
+
+.message-wrapper {
+  width: 80%;
+  font-weight: 400;
+  padding: 1.5em;
+  border: solid 5px;
+  border-radius: 50px;
+}
+
+.success {
+  color: green;
+}
+
+.failure {
+  color: red;
+}
