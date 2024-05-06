@@ -25,7 +25,7 @@ const generateId = () => {
    const maxId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0
    return maxId + 1
 }
-
+app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 
