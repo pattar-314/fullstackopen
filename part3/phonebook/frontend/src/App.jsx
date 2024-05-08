@@ -79,7 +79,7 @@ const App = () => {
     const newList = persons.filter((e) => e.id !== id)
     console.log('new list: ', newList)
     setPersons(newList)
-    deleted !== undefined ? handleMessage(`person ${deleted.name} deleted`, 'success') : null 
+    deleted !== undefined ? handleMessage(`person with id ${id} deleted`, 'success') : null 
   }
 
 
