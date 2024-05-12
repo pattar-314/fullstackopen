@@ -17,6 +17,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    'react/props-validation': '0'
+    'react/props-validation': 0
   },
 }

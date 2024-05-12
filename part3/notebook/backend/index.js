@@ -1,6 +1,13 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const Note = require('./models/Note')
+const { mongoose } = require('mongoose')
+
+require('dotenv').config()
+
+mongoose.connect(process.env.MONGODB_URI)
+mongoose.set('strictQuery', false)
 
 
 let notes = [
@@ -30,13 +37,10 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id)
-  if(note){
-    response.json(note)
-  } else {
-    response.status(404).end()
-  }
+  const foundNote = Note.findById(id).then(result => {
+    console.log(`finding note ${result}`)
+    response.send(result)
+  })
 })
 
 app.post('/api/notes', (request, response) => {
@@ -47,29 +51,38 @@ app.post('/api/notes', (request, response) => {
     })
   }
 
-  const note = {
+  const newNote = new Note({
     content: body.content,
     important: Boolean(body.important) || false,
     id: generateId()
-  }
+  })
 
-  notes = notes.concat(note)
-  response.json(note)
+  newNote.save().then(result => {
+    console.log(`adding result ${result}`)
+    response.json(result)
+  })
+
+  notes = notes.concat(newNote)
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
 
-  response.status(204).end()
+app.delete('/api/notes/:id', (request, response) => {
+  const toDelete = Note.findByIdAndDelete(request.params.id)
+  .then(result => {
+    notes = notes.filter(note => note.id !== request.params.id)
+    response.status(204).end()
+  })
+  
 })
 
 
 app.get('/api/notes', (request, response) => {
-  response.json(notes)
-})
+  const responseData = Note.find({}).then(result => {
+    console.log(`result: ${result}`)
+    response.json(result)
+})})
 
-app.get('/', (request, response) => {
+app.get('/', (request, responseData) => {
   response.send('<h1>Hello World!</h1>')
 })
 
