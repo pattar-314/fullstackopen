@@ -2,10 +2,15 @@ const express = require("express")
 const axios = require("axios")
 const morgan = require("morgan")
 const cors = require("cors")
+const { default: mongoose } = require("mongoose")
+const Person = require("./models/Person")
+require('dotenv').config()
 
 const app = express()
 
-let persons = [
+
+
+let personssdfs = [
   { 
     "id": 1,
     "name": "Arto Hellas", 
@@ -34,6 +39,8 @@ app.use(express.json())
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+mongoose.connect(process.env.MONGODB_URI)
+
 app.get('/info', (reqest, response) => {
   const options = {
     weekday: 'long',
@@ -49,17 +56,13 @@ app.get('/info', (reqest, response) => {
 
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const foundPerson = persons.filter((p) =>  p.id === Number(request.params.id))
-  if(foundPerson.length < 1){
-    console.log('could not find person with that id')
-    response.status(404).json({error: 'person not found'})
-  } else {
-    response.json(foundPerson[0])
-  }
+app.get('/api/persons/:id', (request, response) => { 
+  Person.findById(request.params.id).then(result => {
+    response.json(result)
+  }).error(error => res.json({message: `an error has occured: ${error}`}))
 })
 
-app.get('/api/persons', (request, response) => response.json(persons))
+app.get('/api/persons', (request, response) => res.json(Persons.find({})))
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -70,19 +73,20 @@ app.post('/api/persons', (request, response) => {
     response.status(402).json({error: 'duplicate name'})
     return null
   }
-  const newPerson = {...body, id: Math.floor(Math.random() * 10000 )}
+
+  const newPerson = new Person({...body, id: Math.floor(Math.random() * 10000 )})
   console.log('new person: ', newPerson)
   persons = persons.concat(newPerson)
-  if(response.status === 404){
-    console.log('could not add person')
-    response.json({error: 'could not add person'})
-  }
+  newPerson.save()
   response.json(persons)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
+  const deleted = Person.findByIdAndDelete(request.params.id).then(result => {
+    console.log(`delete result: ${result}`)
+    response.json({result})
+  })
 
-  const newList = persons.filter((p) => p.id !== Number(request.params.id) )
   console.log('newList:', newList)
   persons = newList
   response.json(persons)
