@@ -1,9 +1,10 @@
 const express = require('express')
+const Note = require('../models/Note')
 const router = express.Router()
 
 router.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
-  const note = notes.find(note => note.id === id)
+  const note = Note.findById(request.params.id)
   if(note){
     response.json(note)
   } else {

@@ -42,10 +42,12 @@ const App = () => {
       handleMessage('please enter all needed information', 'failure')
       return null
     }
+
     const personInfo = {name: newName, number: newNumber}
     console.log('filter: ', persons.filter((p) => p.name === personInfo.name))
     const filterList = persons.filter((p) => p.name === personInfo.name)
     console.log('filter list: ', filterList)
+
     if(filterList.length > 0){
       updatePerson(personInfo)
       handleMessage(`person ${personInfo.newName} updated`, 'success')
@@ -57,8 +59,9 @@ const App = () => {
       handleMessage(`created person ${personInfo.name}`, 'success')
       
       console.log('test 2')
-      }).catch((err) => handleMessage(`error creating person  ${personInfo.newName}`, 'failure'))
+      }).catch(() => handleMessage(`error creating person ${personInfo.name}`, 'failure'))
     }
+    
     console.log('resetting form')
     setNewName('')
     setNewNumber('')
@@ -74,7 +77,7 @@ const App = () => {
   }
 
   const deletePerson = async (id) => {
-    const deleted = await phonebookServices.deletePerson(id).catch((err) => handleMessage(`error deleting person with id ${id}`, 'failure'))
+    const deleted = await phonebookServices.deletePerson(id).catch(() => handleMessage(`error deleting person with id ${id}`, 'failure'))
     console.log('deleted: ', deleted)
     const newList = persons.filter((e) => e.id !== id)
     console.log('new list: ', newList)
@@ -83,7 +86,7 @@ const App = () => {
   }
 
 
-  const filterList = persons.filter((fb) => (fb.name.includes(filterInput) || fb.number.includes(filterInput)) )
+  const filterList = persons.filter((fb) => (fb.name.toLowerCase().includes(filterInput.toLowerCase()) || fb.number.includes(filterInput)) )
 
 
 

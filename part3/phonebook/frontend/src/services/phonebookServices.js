@@ -4,7 +4,8 @@ const baseUrl = 'http://localhost:3001/api/persons'
 
 
 const createPerson = (newPerson) => {
-  const request = axios.post(baseUrl, newPerson).then((response) => response.data)
+  const request = axios.post(baseUrl, newPerson).then((response) => response.data).catch(err => console.error('there was an error: ', err))
+  console.log('services request: ', request)
   return request
 }
 
