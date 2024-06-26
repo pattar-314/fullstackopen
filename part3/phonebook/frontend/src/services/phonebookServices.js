@@ -4,8 +4,11 @@ const baseUrl = 'http://localhost:3001/api/persons'
 
 
 const createPerson = (newPerson) => {
-  const request = axios.post(baseUrl, newPerson).then((response) => response.data).catch(err => console.error('there was an error: ', err))
-  console.log('services request: ', request)
+  const request = axios.post(baseUrl, newPerson).then(response => {
+    console.log('create response: ', response.data)
+    return response.data
+  }).catch(err => console.error('error in create: ', err))
+  
   return request
 }
 
@@ -14,19 +17,17 @@ const readOnePerson = (id) => {
   return request
 }
 
+
+
 const readAllPersons = () => {
-  const request = axios.get(baseUrl).then((response) => response.data)
+  const request = axios.get(baseUrl).then(response => response.data)
   return request
 }
 
-const updatePerson = (id, updatedData) => {
-  const request = axios.put(`${baseUrl}/${id}`, updatedData).then((response) => response.data)
-  return request
-}
 
 const deletePerson = (id) => {
   const request = axios.delete(`${baseUrl}/${id}`).then((response) => response.data)
   return request
 }
 
-export default {createPerson, readOnePerson, readAllPersons, updatePerson, deletePerson}
+export default {createPerson, readOnePerson, readAllPersons, deletePerson}

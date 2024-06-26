@@ -44,7 +44,7 @@ app.use(express.json())
 app.use(errorHandler)
 
 app.get('/api/notes/:id', (req, res, next) => {
-  const foundNote = Note.findById(id).then(result => {
+  const foundNote = Note.findById(req.params.id).then(result => {
     if(result){
       res.json(result)
     } else {
@@ -69,7 +69,7 @@ app.post('/api/notes', (req, res, next) => {
   newNote.save().then(result => {
     console.log(`adding result ${result}`)
     res.json(result)
-  })
+  }).catch(err => next(err))
 
   notes = notes.concat(newNote)
 })
@@ -84,24 +84,19 @@ app.delete('/api/notes/:id', (req, res, next) => {
 })
 
 app.put('/api/notes/:id', (req, res) => {
-  const body = req.body
+  const {content, important} = req.body
 
-  const note = {
-    content: body.content,
-    important: body.important,
-  }
-
-  Note.findByIdAndUpdate(request.params.id, note, {new: true}).then(
+  Note.findByIdAndUpdate(req.params.id, {content, important}, {new: true, runValidators: true, context: 'query'}).then(
     updatedNote => {
-      response.json(updatedNote)
+      res.json(updatedNote)
     }).then(updatedNote => {
-      response.json(updatedNote)
+      res.json(updatedNote)
     }).catch(error => next(error))
 })
 
 app.get('/api/notes', (req, res, next) => {
   const resData = Note.find({}).then(result => {
-    console.log(`result: ${result}`)
+    // console.log(`result: ${result}`)
     res.json(result)
   }).catch(error => next(error))
 })
