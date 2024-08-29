@@ -1,14 +1,24 @@
-const express = require('express')
+
+const app = require('./app')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
+
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
+})
+
+
+/* const express = require('express')
 const app = express()
 const cors = require('cors')
 const Note = require('./models/Note')
 const { mongoose } = require('mongoose')
-const { errorHandler } = require('./services/middleware')
-const { unknownEndpoint } = require('./services/services')
+const { errorHandler } = require('./utils/middleware')
+const { unknownEndpoint } = require('./utils/services')
+const config = require('./utils/config')
 
-require('dotenv').config()
 
-mongoose.connect(process.env.MONGODB_URI).then(result => {
+mongoose.connect(config.MONGODB_URI).then(() => {
   console.log('connected to MongoDB')
 }).catch(error => {
   console.log('error connecting to MongoDB: ', error.message)
@@ -34,17 +44,14 @@ let notes = [
   }
 ]
 
-const generateId = () => {
-   const maxId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0
-   return maxId + 1
-}
+
 app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 app.use(errorHandler)
 
 app.get('/api/notes/:id', (req, res, next) => {
-  const foundNote = Note.findById(req.params.id).then(result => {
+  Note.findById(req.params.id).then(result => {
     if(result){
       res.json(result)
     } else {
@@ -77,31 +84,31 @@ app.post('/api/notes', (req, res, next) => {
 
 app.delete('/api/notes/:id', (req, res, next) => {
   Note.findByIdAndDelete(req.params.id)
-  .then(result => {
-    notes = notes.filter(note => note.id !== req.params.id)
-    res.status(204).end()
-  }).catch(error => next(error))
-})
-
-app.put('/api/notes/:id', (req, res) => {
-  const {content, important} = req.body
-
-  Note.findByIdAndUpdate(req.params.id, {content, important}, {new: true, runValidators: true, context: 'query'}).then(
-    updatedNote => {
-      res.json(updatedNote)
-    }).then(updatedNote => {
-      res.json(updatedNote)
+    .then(() => {
+      notes = notes.filter(note => note.id !== req.params.id)
+      res.status(204).end()
     }).catch(error => next(error))
 })
 
+app.put('/api/notes/:id', (req, res, next) => {
+  const { content, important } = req.body
+
+  Note.findByIdAndUpdate(req.params.id, { content, important }, { new: true, runValidators: true, context: 'query' }).then(
+    updatedNote => {
+      res.json(updatedNote)
+    }).then(updatedNote => {
+    res.json(updatedNote)
+  }).catch(error => next(error))
+})
+
 app.get('/api/notes', (req, res, next) => {
-  const resData = Note.find({}).then(result => {
+  Note.find({}).then(result => {
     // console.log(`result: ${result}`)
     res.json(result)
   }).catch(error => next(error))
 })
 
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
@@ -110,6 +117,5 @@ app.use(errorHandler)
 
 
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT)
-console.log(`server running on port: ${PORT}`)
+app.listen(config.PORT || 3001)
+console.log(`server running on port: ${config.PORT}`) */
