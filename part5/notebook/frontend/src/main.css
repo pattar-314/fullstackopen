@@ -1,0 +1,17 @@
+body {
+  background-color: darkgray;
+}
+
+.note {
+  padding-top: 5px;
+  font-size: 15px;
+}
+
+.login-form-wrapper {
+  max-width: 20em;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}

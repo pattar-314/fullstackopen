@@ -1,0 +1,43 @@
+.app-wrapper {
+  margin: auto;
+  flex-direction: column;
+}
+
+.login-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 17em;
+  margin: auto;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-list-wrapper {
+  max-width: 17em;
+  margin: auto;
+}
+
+.blog-entry-wrapper {
+  max-width: 20em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.notification {
+  background-color: lightgray;
+  border: solid 5px;
+  border-radius: 15px;
+  padding: .5em;
+  font-size: 2em;
+}
+
+.notification-confirm {
+  color: green;
+}
+
+.notification-deny {
+  color: red;
+}

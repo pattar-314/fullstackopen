@@ -33,7 +33,8 @@ const errorHandler = (error, req, res, next) => {
 }
 
 const getTokenFrom = (req) => {
-  const authorization = req.get('authorization')
+  console.log('grabbing authorization: ', req.get('Authorization'))
+  const authorization = req.get('Authorization')
   if (authorization && authorization.startsWith('Bearer ')){
     return authorization.replace('Bearer ', '')
   }
