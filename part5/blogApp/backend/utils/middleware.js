@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const logger = (req, res, next) => {
+  console.log('Method: ', req.method)
   console.log(`Path: ${req.path}`)
   console.log(`URL: ${req.url}`)
   console.log(`Body: ${JSON.stringify(req.body)}`)
@@ -17,11 +18,21 @@ const unknownEndpoint = (req, res, next) => {
 }
 
 const extractToken = (req, res, next) => {
-  const authorization = req.get('Authorization')
-  if(authorization && authorization.startsWith('Bearer ')){
-    const token = authorization.replace('Bearer ', '')
-    req.token = token
+  console.log('test3')
+  try{
+    const authorization = req.get('Authorization')
+    if(authorization && authorization.startsWith('Bearer ')){
+      console.log('extracted token: ', authorization)
+      const token = authorization.replace('Bearer ', '')
+      req.token = token
+    } else {
+      console.log('invalid token')
+      res.status(500).json({error: 'authorization failed'})
+    }
+  } catch(err) {
+    console.log('extract token error: ', err)
   }
+
   next()
 }
   

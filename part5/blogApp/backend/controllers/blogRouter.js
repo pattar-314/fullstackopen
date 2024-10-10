@@ -17,16 +17,17 @@ const decodeToken = (token) => {
 }
 
 blogRouter.get('/blogs', async (req, res, next) => {
-  const foundBlog = await Blog.find({})
-  res.json(foundBlog)
+  const foundBlogs = await Blog.find({}).populate('user', { username: 1 })
+  res.json(foundBlogs)
 })
 
 blogRouter.get('/blogs/:id', async (req, res, next) => {
-  const foundBlog = await Blog.findById(req.params.id)
+  const foundBlog = await Blog.findById(req.params.id).populate('user', { username: 1 })
   res.json(foundBlog)
 })
 
 blogRouter.post('/blogs', [extractToken, extractUser], async (req, res, next) => {
+  console.log('test 2')
   const recievedToken = req.token
   // if there is not a token return an error
   if (!recievedToken) {
@@ -79,11 +80,11 @@ blogRouter.delete('/blogs/:id', extractToken, async (req, res, next) => {
     res.status(500).send({ error }).end()
   })
 
-  const foundBlog = await Blog.findById(req.params.id).catch(error => {
+  const foundBlog = await Blog.findById(req.params.id).populate('user', { username: 1 }).catch(error => {
     console.error('blog not found: ', error)
   })
-  if (foundBlog.user.toString() !== decodedToken.id) {
-    console.log(`blog user: ${foundBlog.user}: decodedUser: ${decodedToken.id} equal: ${foundBlog.user.toString() === decodedToken.id}`)
+  if (foundBlog.user.id.toString() !== decodedToken.id) {
+    console.log(`blog user: ${foundBlog.user.id.toString()}: decodedUser: ${decodedToken.id} equal: ${foundBlog.user.id.toString() === decodedToken.id}`)
     console.error('user not authenticated')
     res.status(500).send({ error: 'user not authenticated' }).end()
   } else {

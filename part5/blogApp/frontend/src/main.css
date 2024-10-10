@@ -16,14 +16,28 @@
 }
 
 .blog-list-wrapper {
-  max-width: 17em;
+  max-width: fit-content;
   margin: auto;
 }
 
 .blog-entry-wrapper {
-  max-width: 20em;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+}
+
+.blog-entry-primary-information {
+  display: flex;
+  justify-content: space-between
+}
+
+.blog-entry-primary-information > * {
+  padding: 1em;
+}
+
+.blog-entry-extended-information {
+  display: flex;
+  flex-direction: column;
 }
 
 .notification {
