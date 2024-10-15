@@ -6,7 +6,7 @@ let token = null
 
 const setToken = newToken => {
   console.log('set token: ', newToken)
-  token = `Bearer ${newToken}` 
+  token = `Bearer ${newToken}`
 }
 
 const getAll = async () => {
@@ -31,4 +31,4 @@ const update = async (id, newObject) => {
 }
 
 
-export default {getAll, create, update, setToken}
+export default { getAll, create, update, setToken }
