@@ -1,5 +1,5 @@
 import { useState } from "react"
-import blogServices from './../services/blogs.js'
+import {updateBlog} from './../services/blogs.js'
 
 
 const Blog = ({ blog, handleDelete }) => {
@@ -25,14 +25,23 @@ const Blog = ({ blog, handleDelete }) => {
       likes: likes + 1
     }
 
-    const likedBlog = await blogServices.updateBlog(requestObject)
+    const likedBlog = await updateBlog(requestObject)
     setLikes(likedBlog.likes)
 
   }
 
-
   const extendedInfoStyle = visible ? null : {'display': 'none'} 
-  
+
+  const extendedInfo = (
+        <div className='extended-blog-info' style={extendedInfoStyle}>
+      <div className='blog-entry-url'>{blog.url}</div>
+      <div className='blog-entry-likes'>likes: {likes}<button onClick={handleLike}>like</button></div>
+      <div className='blog-entry-user'>user: {blog.user.username}</div>
+      <button onClick={() => ( confirm(`Remove blog ${blog.title} by ${blog.author}`) ? handleDelete(blog.id) : null )}>remove</button>
+    </div>
+ 
+  )
+ 
   return (
   <div className='blog-entry-wrapper' style={blogStyle}>
     <div className='blog-entry-primary-information'>
@@ -40,15 +49,9 @@ const Blog = ({ blog, handleDelete }) => {
       <div className='blog-entry-author'>{blog.author}</div>
       <button onClick={toggleVisible}>{visible ? <>close</> : <>show</>}</button>
     </div>
-
-    <div className='extended-blog-info' style={extendedInfoStyle}>
-      <div className='blog-entry-url'>{blog.url}</div>
-      <div className='blog-entry-likes'>likes: {likes}<button onClick={handleLike}>like</button></div>
-      <div className='blog-entry-user'>user: {blog.user.username}</div>
-      <button onClick={() => ( confirm(`Remove blog ${blog.title} by ${blog.author}`) ? handleDelete(blog.id) : null )}>remove</button>
-    </div>
+    {visible ? extendedInfo : null}
   </div>  
-  )
+ )
 }
 
 export default Blog

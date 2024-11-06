@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-const token = `Bearer ${JSON.parse(window.localStorage.getItem('blogAppUser')).token}`
+const token = window.localStorage.getItem('blogAppUser') ? `Bearer ${JSON.parse(window.localStorage.getItem('blogAppUser')).token}` : null
 
 console.log('token: ', token)
 
