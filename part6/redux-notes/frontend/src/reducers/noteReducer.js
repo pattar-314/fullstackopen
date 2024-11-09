@@ -24,7 +24,15 @@ export const toggleImportanceOf = (id) => {
   }
 }
 
-const noteReducer = (state = [], action) => {
+const initialState = [
+  {
+    content: 'reducer defines how redux store works',
+    important: true,
+    id: 2
+  }
+]
+
+const noteReducer = (state = initialState, action) => {
   console.log('dispatching action: ', action)
   switch(action.type){
     case 'NEW_NOTE':
