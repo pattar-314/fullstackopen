@@ -6,7 +6,6 @@ import { Provider } from 'react-redux'
 import noteReducer, { appendNote } from './reducers/noteReducer.js'
 import filterReducer from './reducers/filterReducer.js'
 import { configureStore } from '@reduxjs/toolkit'
-import noteService from '../services/notes.js'
 
 
 

@@ -1,17 +1,16 @@
 import { useDispatch } from "react-redux"
-import { appendNote, createNote } from "../reducers/noteReducer"
-import noteService from "../../services/notes"
+import { createNote } from "../reducers/noteReducer"
+import noteService from "../services/notes"
 
 
-const NewNote = () => {
+const NewNote = (props) => {
   const dispatch = useDispatch()
 
   const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.note.value = ''
-    const newNote = await noteService.createNew(content)
-    dispatch(appendNote(newNote))
+    dispatch(createNote(content))
   }
 
   return (
@@ -23,3 +22,5 @@ const NewNote = () => {
 }
 
 export default NewNote
+
+926296
