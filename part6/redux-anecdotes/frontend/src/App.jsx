@@ -4,9 +4,8 @@ import AnecdoteFilter from "./components/AnecdoteFilter"
 import AnecdoteList from "./components/AnecdoteList"
 import NewAnecdote from "./components/NewAnecdote"
 import Notification from "./components/Notification"
-import axios from "axios"
 import { useDispatch } from "react-redux"
-import { setAnecdotes } from "./reducers/anecdoteReducer"
+import { initializeAnecdotes} from "./reducers/anecdoteReducer"
 
 const App = () => {
 
@@ -14,10 +13,7 @@ const App = () => {
 
   useEffect(() => {
     console.log('attempting to get anecdotes')
-    axios.get('http://localhost:3001/anecdotes').then((returnedAnecdotes) => {
-      console.log('initial anecdotes: ', returnedAnecdotes.data)
-      dispatch(setAnecdotes(returnedAnecdotes.data))
-    })
+    dispatch(initializeAnecdotes())
   }, [dispatch])
 
 

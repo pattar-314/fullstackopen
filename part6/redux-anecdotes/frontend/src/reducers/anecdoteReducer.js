@@ -1,23 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit"
-import axios from 'axios'
+import { getAll } from "../services/anecdoteServices"
 
-const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
+
+export const createNew = ( anecdote ) => {
+  return async (dispatch) => {
+    dispatch(newAnecdote(anecdote))
   }
 }
 
-export const createNew = async( content ) => {
-  const anecdoteObject = asObject(content)
-  const madeNote = await axios.post('http://localhost:3001/anecdotes', anecdoteObject)
-  return madeNote
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const initialAnecdotes = await getAll()
+    console.log('get all: ', initialAnecdotes.data)
+    dispatch(setAnecdotes(initialAnecdotes.data))
+  }
 }
 
-
+export const vote = (modifiedAnecdote) => {
+  return async (dispatch) => {
+    console.log('dispatch: ', dispatch)
+    dispatch(anecdoteVote(modifiedAnecdote))
+  }
+}
 
 
 const anecdoteSlice = createSlice({
@@ -25,17 +30,11 @@ const anecdoteSlice = createSlice({
   initialState: [],
   reducers: {
     newAnecdote(state, action){
-      return state.concat(asObject(action.payload))
+      return state.concat(action.payload)
     },
   anecdoteVote(state, action){
-    console.log('vote')
-    const id = action.payload
-    console.log('test 1: ', action.payload)
-    const selectedAnecdote = state.find(a => a.id === id)
-    console.log('test 2: ', selectedAnecdote)
-    const modifiedAnecdote = {...selectedAnecdote, votes: selectedAnecdote.votes + 1}
-    console.log('test 3: ', modifiedAnecdote)
-    return state.map(a => a.id === id ? modifiedAnecdote: a)
+    const id = action.payload.id
+    return state.map(a => a.id === id ? action.payload: a)
   },
   setAnecdotes(state, action){
     return action.payload
