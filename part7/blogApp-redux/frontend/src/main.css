@@ -1,0 +1,61 @@
+body {
+  background-color: lightgray;
+}
+
+.app-wrapper {
+  margin: auto;
+  flex-direction: column;
+}
+
+.login-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 17em;
+  margin: auto;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-list-wrapper {
+  max-width: fit-content;
+  margin: auto;
+}
+
+.blog-entry-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.blog-entry-primary-information {
+  display: flex;
+  justify-content: space-between
+}
+
+.blog-entry-primary-information > * {
+  padding: 1em;
+}
+
+.blog-entry-extended-information {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification {
+  background-color: lightgray;
+  border: solid 5px;
+  border-radius: 15px;
+  padding: .5em;
+  font-size: 2em;
+}
+
+.notification-confirm {
+  color: green;
+}
+
+.notification-deny {
+  color: red;
+}

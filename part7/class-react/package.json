@@ -1,5 +1,5 @@
 {
-  "name": "routed-notes",
+  "name": "class-react",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,18 +7,14 @@
     "dev": "vite --host --port 3000",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "json-server --port 3001 db.json"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
-    "@mui/material": "^6.1.8",
-    "axios": "^1.7.7",
+    "axios": "^1.7.8",
+    "json-server": "^1.0.0-beta.3",
     "react": "^18.3.1",
-    "react-bootstrap": "^2.10.5",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.0.1",
-    "styled-components": "^6.1.13"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
