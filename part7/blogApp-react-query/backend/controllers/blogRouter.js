@@ -72,18 +72,20 @@ blogRouter.delete('/blogs/:id', extractToken, async (req, res, next) => {
     console.log('override success: ', deletedBlog)
     return res.json({message: 'it worked'})
   } */
-  // make sure the user is correct then delete
+  // make sure the user is correct then delete\
+  console.log('req1: ', req.token)
   const decodedToken = decodeToken(req.token)
   console.log('decoded token: ', decodedToken)
   const foundUser = await User.findById(decodedToken.id).catch(error => {
     console.error('user not found: ', error)
     res.status(500).send({ error }).end()
   })
+  console.log('params: ', req.params)
 
-  const foundBlog = await Blog.findById(req.params.id).populate('user', { username: 1 }).catch(error => {
-    console.error('blog not found: ', error)
-  })
-  if (foundBlog.user.id.toString() !== decodedToken.id) {
+  const foundBlog = await Blog.findById(req.params.id).populate('user', { username: 1 }).catch(error => { console.error('blog not found: ', error) })
+
+  console.log('found blog: ', foundBlog)
+  if (foundBlog.user.id.toString === decodedToken.id) {
     console.log(`blog user: ${foundBlog.user.id.toString()}: decodedUser: ${decodedToken.id} equal: ${foundBlog.user.id.toString() === decodedToken.id}`)
     console.error('user not authenticated')
     res.status(500).send({ error: 'user not authenticated' }).end()

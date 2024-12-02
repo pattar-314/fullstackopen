@@ -1,4 +1,6 @@
+import { QueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { createContext } from 'react'
 const baseUrl = '/api/blogs'
 
 const token = window.localStorage.getItem('blogAppUser') ? `Bearer ${JSON.parse(window.localStorage.getItem('blogAppUser')).token}` : null
@@ -9,7 +11,8 @@ const getConfig = {headers: {Authorization: token}}
 
 const getAll = async () => {
   const request = await axios.get(baseUrl)
-  return request.data
+  console.log('get all working: ', request.data)
+  return request.data.sort((a, b) => b.likes - a.likes)
 }
 
 const getOne = async (id) => {
@@ -32,4 +35,9 @@ const deleteBlog = async (id) => {
   return request.data
 }
 
-export default { getAll, getOne, createBlog, updateBlog, deleteBlog }
+export const BlogContext = createContext()
+export const NotificationContext = createContext()
+export const UserContext = createContext()
+export const queryClient = new QueryClient()
+
+export default { getAll, getOne, createBlog, updateBlog, deleteBlog, queryClient }

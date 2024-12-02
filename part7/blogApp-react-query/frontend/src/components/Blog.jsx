@@ -1,11 +1,9 @@
 import { useState } from "react"
-import {updateBlog} from './../services/blogs.js'
 
 
-const Blog = ({ blog, handleDelete }) => {
+const Blog = ({ blog, handleDelete, handleLike }) => {
 
   const [visible, setVisible] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
 
   const blogStyle = {
     paddingTop: 10,
@@ -19,23 +17,14 @@ const Blog = ({ blog, handleDelete }) => {
     setVisible(!visible)
   }
 
-  const handleLike = async () => {
-    const requestObject = {
-      title: blog.title,
-      likes: likes + 1
-    }
 
-    const likedBlog = await updateBlog(requestObject)
-    setLikes(likedBlog.likes)
-
-  }
 
   const extendedInfoStyle = visible ? null : {'display': 'none'} 
 
   const extendedInfo = (
-        <div className='extended-blog-info' style={extendedInfoStyle}>
+      <div className='extended-blog-info' style={extendedInfoStyle}>
       <div className='blog-entry-url'>{blog.url}</div>
-      <div className='blog-entry-likes'>likes: {likes}<button onClick={handleLike}>like</button></div>
+      <div className='blog-entry-likes'>likes: {blog.likes}<button onClick={() => handleLike(blog)}>like</button></div>
       <div className='blog-entry-user'>user: {blog.user.username}</div>
       <button onClick={() => ( confirm(`Remove blog ${blog.title} by ${blog.author}`) ? handleDelete(blog.id) : null )}>remove</button>
     </div>

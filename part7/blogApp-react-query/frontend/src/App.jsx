@@ -1,24 +1,29 @@
-import { useState, useEffect } from 'react'
+import { useContext, useEffect, useReducer } from 'react'
 import BlogMain from './components/BlogMain'
 import LoginForm from './components/LoginForm'
 import axios from 'axios'
 import './main.css'
+import notificationReducer from './reducers/notificationReducer'
+import { NotificationContext, UserContext } from './services/blogService'
+import Notification from './components/Notification'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
+  const [user, userDispatch] = useContext(UserContext)
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
+
 
   useEffect(() => {
     const loggedUser = JSON.parse(window.localStorage.getItem('blogAppUser'))
     if(loggedUser){
-      setUser(loggedUser)
+      userDispatch({type: 'SET_USER', payload: loggedUser})
     }
   }, [])
 
   const handleNotification = (status, message) => {
-    setNotification({status, message})
+    notificationDispatch({type: 'SET_NOTIFICATION', payload: {status, message}})
     setTimeout(() => {
-      setNotification(null)
+      console.log('test 2')
+      notificationDispatch({type: 'CLEAR_NOTIFICATION'})
     }, 3000)
   }
 
@@ -29,19 +34,19 @@ const App = () => {
       const loginRequest = await axios.post('/api/auth/login', { username, password })
       const loginData = loginRequest.data
       console.log('login request: ', loginData)
-      setUser(loginData)
+      userDispatch({type: 'SET_USER', payload: loginData})
       window.localStorage.setItem('blogAppUser', JSON.stringify(loginData))
     } catch(err) {
       handleNotification('notification-deny', 'user login failed')
     }
     
   }
-
+  
 
   return (
     <div className='app-wrapper'>
-      {!notification ? null : <div className={`notification ${notification.status}`}><b>{notification.message}</b></div> }
-      {user ? <BlogMain user={user} handleNotification={handleNotification} /> : <LoginForm handleLogin={handleLogin} handleNotification={handleNotification} /> }
+      <NotificationContext.Provider value={[notification, notificationDispatch]}><Notification /></NotificationContext.Provider>
+      {user ? <BlogMain user={user} userDispatch={userDispatch} handleNotification={handleNotification} /> : <LoginForm handleLogin={handleLogin} handleNotification={handleNotification} /> }
     </div>
 
   )
