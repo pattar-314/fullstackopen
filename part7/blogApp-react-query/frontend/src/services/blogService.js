@@ -17,7 +17,8 @@ const getAll = async () => {
 
 const getOne = async (id) => {
   const request = await axios.get(`${baseUrl}/${id}`)
-  return request.data
+  const data  = request.data
+  return data
 }
 
 const createBlog = async (blogInfo) => {
