@@ -4,16 +4,19 @@ const loggedUser = window.localStorage.getItem('blogAppUser') ? window.localStor
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: loggedUser,
+  initialState: {currentUser: loggedUser, allUsers: []},
   reducers: {
     setUser(state, action){
-      return action.payload
+      return {...state, currentUser: action.payload}
     },
     clearUser(state, action){
       return null
+    },
+    allUsers(state, action){
+      return {...state, allUsers: action.payload}
     }
   }
 })
 
-export const { setUser, clearUser } = userSlice.actions
+export const { setUser, clearUser, allUsers } = userSlice.actions
 export default userSlice.reducer

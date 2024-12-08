@@ -30,7 +30,7 @@ authRouter.post('/login', async (req, res, next) => {
 
 })
 
-authRouter.post('/user', async (req, res) => {
+authRouter.post('/users', async (req, res) => {
   const userExists = await User.findOne({ username: req.body.username })
   if (userExists) {
     res.status(500).json({ error: 'user already exists' }).end()
@@ -53,13 +53,18 @@ authRouter.post('/user', async (req, res) => {
 })
 
 
-authRouter.get('/user', async (req, res) => {
-  const retrievedUser = await User.findById(req.body.id)
+authRouter.get('/users/:id', async (req, res) => {
+  const retrievedUser = await User.findById(req.params.id)
   console.log('retrieved user: ', retrievedUser)
   res.json(retrievedUser).end()
 })
 
-authRouter.put('/user', async (req, res) => {
+authRouter.get('/users', async (req, res) => {
+  const allUsers = await User.find({}).select({username: 1, blogs: 1})
+  res.json(allUsers)
+})
+
+authRouter.put('/users', async (req, res) => {
   // validate user before making update
   const retrievedUser = await User.findOne({ username: req.body.username })
   if (retrievedUser === null) {
@@ -75,7 +80,7 @@ authRouter.put('/user', async (req, res) => {
   res.status(200).json(updateRequest).end()
 })
 
-authRouter.delete('/user', async (req, res) => {
+authRouter.delete('/users', async (req, res) => {
   const userToDelete = req.get('user')
   if (userToDelete === null) {
 
