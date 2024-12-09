@@ -53,17 +53,15 @@ authRouter.post('/users', async (req, res) => {
 })
 
 
+authRouter.get('/users/:id', async (req, res) => {
+  const retrievedUser = await User.findById(req.params.id)
+  console.log('retrieved user: ', retrievedUser)
+  res.json(retrievedUser).end()
+})
+
 authRouter.get('/users', async (req, res) => {
-  if(req.body.id){
-    const retrievedUser = await User.findById(req.body.id)
-    console.log('retrieved user: ', retrievedUser)
-    res.json(retrievedUser).end()
-  } else {
-    const retrievedUsers = await User.find({})
-    console.log('retrieved users: ', retrievedUsers)
-    res.json(retrievedUsers).end()
-  }
-  
+  const allUsers = await User.find({}).select({username: 1, blogs: 1})
+  res.json(allUsers)
 })
 
 authRouter.put('/users', async (req, res) => {
