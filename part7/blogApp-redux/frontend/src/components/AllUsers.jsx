@@ -1,4 +1,4 @@
-import { useDispatch, useSelect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import userService from './../services/userService'
 import { useEffect, useReducer } from 'react'
 import { allUsers } from '../reducers/userReducer'
@@ -7,7 +7,7 @@ import { Table } from 'react-bootstrap'
 
 const AllUsers = () => {
 
-    const users = useSelect(state => state.users ? state.users : [])
+    const users = useSelector(state => state.users ? state.users : [])
     const userReducer = useReducer(userReducer)
     const dispatch = useDispatch()
     

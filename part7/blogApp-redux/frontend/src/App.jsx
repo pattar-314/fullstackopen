@@ -8,15 +8,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import AllUsers from './components/AllUsers'
 import SingleUser from './components/SingleUser'
+import { Route, Routes, useMatch } from 'react-router-dom'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user.currentUser)
   const notification = useSelector(state => state.notification)
 
   useEffect(() => {
     if(user){
-      console.log('loggeduser:', JSON.parse(user))
+      console.log('loggeduser:', user)
     }
     
   }, [])
@@ -50,6 +52,7 @@ const App = () => {
 
   return (
     <div className='app-wrapper'>
+      <Navigation />
       {!notification ? null : <div className={`notification ${notification.status}`}><b>{notification.message}</b></div> }
       <Routes>
         <Route path='/' element={user ? <BlogMain user={user} handleNotification={handleNotification} /> : <LoginForm handleLogin={handleLogin} handleNotification={handleNotification} />} />

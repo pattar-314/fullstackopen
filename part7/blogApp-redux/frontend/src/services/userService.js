@@ -20,4 +20,6 @@ const getSingleUser = async (props) => {
   }
 }
 
-export { getAllUsers, getSingleUser }
+const userService = { getAllUsers, getSingleUser }
+
+export default userService
