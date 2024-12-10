@@ -8,14 +8,22 @@ import styled from 'styled-components'
 
 const Navigation = () => {
 
-  const NavLink = styled.Link
+  const NavLink = styled.Link`
+    padding: 1em;
+    background-color: #373e51;
+  `
+
+  const NavContainer = styled.Container`
+    background-color: darkGray;
+    height: min-content;
+  `
 
   return (
     <Navbar>
-      <Container>
-        <Link to='/'>blogs</Link>
-        <Link to='/users'>users</Link>
-      </Container>
+      <NavContainer>
+        <NavLink to='/'>blogs</NavLink>
+        <NavLink to='/users'>users</NavLink>
+      </NavContainer>
     </Navbar>
   )
 }
