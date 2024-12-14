@@ -1,20 +1,9 @@
 import ReactDOM from "react-dom/client";
-// import store from './services/store'
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router";
 import App from "./App";
-import { configureStore } from "@reduxjs/toolkit";
-import blogSlice from "./reducers/blogReducer";
-import notificationSlice from "./reducers/notificationReducer";
-import userSlice from "./reducers/userReducer";
+import store from "./services/store";
 
-const store = configureStore({
-  reducer: {
-    blogs: blogSlice,
-    notification: notificationSlice,
-    user: userSlice,
-  },
-});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

@@ -8,6 +8,7 @@ const authRouter = express.Router()
 
 
 authRouter.post('/login', async (req, res, next) => {
+  console.log('attempting to login')
   const userData = { username: req.body.username, password: req.body.password }
 
   const loginUser = await User.findOne({ username: userData.username })
@@ -54,13 +55,13 @@ authRouter.post('/users', async (req, res) => {
 
 
 authRouter.get('/users/:id', async (req, res) => {
-  const retrievedUser = await User.findById(req.params.id)
+  const retrievedUser = await User.findById(req.params.id).populate()
   console.log('retrieved user: ', retrievedUser)
   res.json(retrievedUser).end()
 })
 
 authRouter.get('/users', async (req, res) => {
-  const allUsers = await User.find({}).select({username: 1, blogs: 1})
+  const allUsers = await User.find({}).populate('blogs')
   res.json(allUsers)
 })
 

@@ -1,21 +1,32 @@
 import { useDispatch, useSelector } from 'react-redux'
 import userService from './../services/userService'
-import { useEffect, useReducer } from 'react'
-import { allUsers } from '../reducers/userReducer'
+import { useEffect } from 'react'
+import { setAllUsers } from '../reducers/userReducer'
 import { Table } from 'react-bootstrap'
+import styled from 'styled-components'
+import { Link } from 'react-router'
+
+
+const TableWrap = styled.div`
+      margin: auto;
+      max-width: fit-content;
+    `
+
+  const paddedTd = styled.td`
+    padding: .5em;
+  `
 
 
 const AllUsers = () => {
 
-    const users = useSelector(state => state.users ? state.users : [])
-    const userReducer = useReducer(userReducer)
+    const users = useSelector(state => state.users.allUsers)
     const dispatch = useDispatch()
     
     const usersCheck = async () => {
         if(users.length < 1){
-            const usertemp = await userService.getAllUsers()
-            console.log('usertemp:', usertemp)
-            await dispatch(allUsers(userTemp.data))
+            const userTemp = await userService.getAllUsers()
+            console.log('usertemp:', userTemp)
+            dispatch(setAllUsers(userTemp))
             console.log('updatedUsers: ', users)
         }
     }
@@ -23,6 +34,8 @@ const AllUsers = () => {
     useEffect(() => {
       usersCheck()
     }, [])
+    
+
 
     const userTable = (
         <Table striped border hover>
@@ -33,20 +46,20 @@ const AllUsers = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(u => (
-              <tr>
-                <td>{u.username}</td>
+            {users ? users.map(u => (
+              <tr key={u.id}>
+                <td><Link to={`/users/${u.id}`}>{u.username}</Link></td>
                 <td>{u.blogs.length}</td>
               </tr>
-            ))}
+            )): <></>}
           </tbody>
         </Table>
     )
     
     return (
-        <div className='all-users-wrapper'>
+        <TableWrap className='all-users-wrapper'>
             {users.length > 0 ? userTable : <div>loading users</div> }
-        </div>
+        </TableWrap>
     )
 }
 

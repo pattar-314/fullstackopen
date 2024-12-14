@@ -1,8 +1,5 @@
 const config = require("./config")
 
-const dummy = (blogs) => {
-  return 1
-}
 
 const totalLikes = (blogs) => {
   const index = 0

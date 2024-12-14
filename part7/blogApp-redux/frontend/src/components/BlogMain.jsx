@@ -5,7 +5,15 @@ import BlogAddForm from './BlogAddForm'
 import Toggleable from './Toggleable'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, newBlog, setBlogs } from '../reducers/blogReducer'
-import { clearUser } from '../reducers/userReducer'
+import styled from 'styled-components'
+import userService from '../services/userService'
+
+const BlogMainWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+`
 
 const BlogMain = (props) => {
   const blogs = useSelector(state => state.blogs)
@@ -28,12 +36,6 @@ const BlogMain = (props) => {
       setup()
   }, [])
 
-
-  const logout = () => {
-    window.localStorage.removeItem('blogAppUser')
-    dispatch(clearUser())
-    location.reload()
-  }
 
   const addBlog = async (title, author, url) => {
     try{
@@ -65,16 +67,16 @@ const BlogMain = (props) => {
   }
 
   return (
-    <div className='blog-list-wrapper'>
+    <BlogMainWrapper>
     <h2>blogs</h2>
-    <div>{props.user.username} logged in</div><button onClick={logout}>logout</button>
+    <div>{props.user.username} logged in</div><button onClick={userService.handleLogout}>logout</button>
     <Toggleable buttonLabel='new blog' ref={blogRef}><BlogAddForm addBlog={addBlog} /></Toggleable>
       {sortedBlogs.map(blog =>
       <Blog key={blog.id} blog={blog} handleDelete={(id) => handleDelete(id)} />
     )}
   
 
-  </div>
+  </BlogMainWrapper>
   )
 }
 

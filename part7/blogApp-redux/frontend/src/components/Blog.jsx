@@ -2,6 +2,7 @@ import { useState } from "react"
 import {updateBlog} from '../services/blogService.js'
 import { useDispatch } from "react-redux"
 import { updateLike } from "../reducers/blogReducer.js"
+import { Link } from "react-router"
 
 
 const Blog = ({ blog, handleDelete }) => {
@@ -34,24 +35,12 @@ const Blog = ({ blog, handleDelete }) => {
 
 
 
-  const extendedInfoStyle = visible ? null : {'display': 'none'} 
-
-  const extendedInfo = (
-    <div className='extended-blog-info' style={extendedInfoStyle}>
-      <div className='blog-entry-url'>{blog.url}</div>
-      <div className='blog-entry-likes'>likes: {blog.likes}<button onClick={handleLike}>like</button></div>
-      <div className='blog-entry-user'>user: {blog.user.username}</div>
-      <button onClick={() => ( confirm(`Remove blog ${blog.title} by ${blog.author}`) ? handleDelete(blog.id) : null )}>remove</button>
-    </div>
- 
-  )
  
   return (
   <div className='blog-entry-wrapper' style={blogStyle}>
     <div className='blog-entry-primary-information'>
-      <div className='blog-entry-title'>{blog.title}</div>
+      <div className='blog-entry-title'><Link to={`/blogs/${blog.id}`}>{blog.title}</Link> </div>
       <div className='blog-entry-author'>{blog.author}</div>
-      <button onClick={toggleVisible}>{visible ? <>close</> : <>show</>}</button>
     </div>
     {visible ? extendedInfo : null}
   </div>  

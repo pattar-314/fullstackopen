@@ -16,15 +16,17 @@ const decodeToken = (token) => {
   }
 }
 
+blogRouter.get('/blogs/:id', async (req, res, next) => {
+  const foundBlog = await Blog.findById(req.params.id).populate('user', { username: 1 })
+  res.json(foundBlog)
+})
+
+
 blogRouter.get('/blogs', async (req, res, next) => {
   const foundBlogs = await Blog.find({}).populate('user', { username: 1 })
   res.json(foundBlogs)
 })
 
-blogRouter.get('/blogs/:id', async (req, res, next) => {
-  const foundBlog = await Blog.findById(req.params.id).populate('user', { username: 1 })
-  res.json(foundBlog)
-})
 
 blogRouter.post('/blogs', [extractToken, extractUser], async (req, res, next) => {
   console.log('test 2: ', req.body)

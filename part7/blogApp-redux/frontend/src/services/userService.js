@@ -1,10 +1,11 @@
-
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
 
 const userBaseUrl = '/api/users'
 
 const getAllUsers = async () => {
-    const allTemp = await get(userBaseUrl)
-    console.log('allTemp: ', allTemp)
+    const allTemp = await axios.get(userBaseUrl)
+    console.log('allTempGetAll: ', allTemp)
     return allTemp.data
 }
 
@@ -20,6 +21,11 @@ const getSingleUser = async (props) => {
   }
 }
 
-const userService = { getAllUsers, getSingleUser }
+const handleLogout = () => {
+    window.localStorage.removeItem('blogAppUser')
+    location.reload()
+}
+
+const userService = { getAllUsers, getSingleUser, handleLogout }
 
 export default userService
