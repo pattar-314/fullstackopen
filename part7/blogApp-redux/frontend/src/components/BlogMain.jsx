@@ -4,7 +4,7 @@ import blogService from '../services/blogService'
 import BlogAddForm from './BlogAddForm'
 import Toggleable from './Toggleable'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBlog, newBlog, setBlogs } from '../reducers/blogReducer'
+import { deleteBlog, newBlog, setAllBlogs } from '../reducers/blogReducer'
 import styled from 'styled-components'
 import userService from '../services/userService'
 
@@ -23,7 +23,7 @@ const BlogMain = (props) => {
     console.log('attempting setup')
     const initBlogs = await blogService.getAll()
     console.log('test 1: ', initBlogs)
-    dispatch(setBlogs(initBlogs))
+    dispatch(setAllBlogs(initBlogs))
   }
 
   const blogRef = useRef()
@@ -33,7 +33,7 @@ const BlogMain = (props) => {
 
  
   useEffect(() => {
-      setup()
+      //setup()
   }, [])
 
 

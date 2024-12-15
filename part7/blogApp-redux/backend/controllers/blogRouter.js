@@ -27,6 +27,12 @@ blogRouter.get('/blogs', async (req, res, next) => {
   res.json(foundBlogs)
 })
 
+blogRouter.post('/blogs/:id/comments', async (req, res, next) => {
+  console.log('adding comment at id: ', req.params.id)
+  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  res.json(updatedBlog)
+})
+
 
 blogRouter.post('/blogs', [extractToken, extractUser], async (req, res, next) => {
   console.log('test 2: ', req.body)
@@ -68,12 +74,6 @@ blogRouter.post('/blogs', [extractToken, extractUser], async (req, res, next) =>
 
 
 blogRouter.delete('/blogs/:id', extractToken, async (req, res, next) => {
-/*   if(req.body.override){
-    console.log('override id: ', req.params.id)
-    const deletedBlog = await Blog.findByIdAndDelete(req.params.id, {new: true}).catch(error => console.log('test error: ', error))
-    console.log('override success: ', deletedBlog)
-    return res.json({message: 'it worked'})
-  } */
   // make sure the user is correct then delete
   const decodedToken = decodeToken(req.token)
   console.log('decoded token: ', decodedToken)

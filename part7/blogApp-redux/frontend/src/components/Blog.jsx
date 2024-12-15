@@ -18,7 +18,7 @@ const Blog = ({ blog, handleDelete }) => {
     marginBottom: 5
   }
 
-  const toggleVisible = () => {
+/*   const toggleVisible = () => {
     setVisible(!visible)
   }
 
@@ -26,12 +26,12 @@ const Blog = ({ blog, handleDelete }) => {
     const requestObject = {
       title: blog.title,
       likes: blog.likes + 1
-    }
 
     const likedBlog = await updateBlog(requestObject)
     console.log('server updated likes: ', likedBlog)
     dispatch(updateLike(likedBlog.id))
   }
+    } */
 
 
 
