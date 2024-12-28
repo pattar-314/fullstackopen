@@ -28,6 +28,8 @@ let authors = [
   },
 ];
 
+
+
 /*
  * Suomi:
  * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
@@ -189,7 +191,8 @@ const resolvers = {
       if(!authors.find(a => a.name === args.name)){
         return null
       }
-      const moddedAuthor = {...authors.find(a => a.name === args.name), born: args.born}
+      const authorToMod = authors.find(a => a.name === args.name)
+      const moddedAuthor = {...authorToMod, born: args.born}
       authors = authors.map(a => a.name === args.name ? moddedAuthor : a)
       return moddedAuthor
     }
