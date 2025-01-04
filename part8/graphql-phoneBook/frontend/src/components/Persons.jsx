@@ -6,6 +6,7 @@ import { FIND_PERSON } from '../queries'
 
 
 const Person = ({person, onClose}) => {
+  console.log('address', person.address)
 
   return (
     <div>
@@ -31,6 +32,7 @@ const Persons = ({ persons }) => {
   })
 
   if(nameToSearch && result.data){
+    console.log('result: ', result.data)
     return <Person person={result.data.findPerson} onClose={() => setNameToSearch(null)} /> 
   }
 

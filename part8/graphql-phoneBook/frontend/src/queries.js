@@ -5,6 +5,10 @@ export const ALL_PERSONS = gql`
     allPersons {
       name
       phone
+      address {
+        street
+        city
+      }
       id
     }
   }

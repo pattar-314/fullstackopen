@@ -23,6 +23,8 @@ const App = () => {
 
   if(result.loading){
     return <AppContainer>loading...</AppContainer>
+  } else {
+    console.log('result: ', result.data)
   }
 
   const notify = (message) => {
