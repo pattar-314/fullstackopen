@@ -10,6 +10,14 @@ const Books = (props) => {
     return null
   }
 
+console.log('book query: ', bookQuery)
+
+  if(bookQuery.loading){
+    return (
+      <div>loading....</div>
+    )
+  }
+
   const books = [...bookQuery.data.allBooks]
 
   return (
@@ -24,9 +32,9 @@ const Books = (props) => {
             <th>published</th>
           </tr>
           {books.map((a) => (
-            <tr key={a.title}>
+            <tr key={a.id}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           ))}

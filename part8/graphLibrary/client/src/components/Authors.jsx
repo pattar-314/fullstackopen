@@ -29,9 +29,8 @@ const Authors = (props) => {
 
   if (!props.show) {
     return null;
-  }
+  }  
 
-  const authors = authorQuery.data ? authorQuery.data.allAuthors : [];
 
   const editAuthor = (e) => {
     e.preventDefault();
@@ -42,12 +41,16 @@ const Authors = (props) => {
       }, 3000);
     } else {
       editAuthorBirth({
-        variables: { name: editAuthorName, born: editAuthorBorn },
+        variables: { name: editAuthorName, setBornTo: Number(editAuthorBorn) },
       });
       setEditAuthorName('');
       setEditAuthorBorn('');
     }
   };
+
+
+  const authors = authorQuery.data ? authorQuery.data.allAuthors : [];
+
 
   return (
     <div>
@@ -63,7 +66,7 @@ const Authors = (props) => {
             <th>books</th>
           </tr>
           {authors.map((a) => (
-            <tr key={a.name}>
+            <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
@@ -74,7 +77,8 @@ const Authors = (props) => {
       <form onSubmit={editAuthor}>
         <h2>Update birthyear</h2>
         <select value={editAuthorName} onChange={(e) => setEditAuthorName(e.target.value)}>
-          {authors.map(a => <option key={a.name} value={a.name}>{a.name}</option>)}
+          <option key='0' value={-1}>-----------</option>
+          { authors.map(a => <option key={a.id} value={a.name}>{a.name}</option>)}
         </select>
         <input
           onChange={(e) => setEditAuthorBorn(Number(e.target.value))} value={editAuthorBorn} placeholder='birth year' />
