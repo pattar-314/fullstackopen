@@ -8,7 +8,8 @@ const PersonSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    minLength: 5
+    minLength: 5,
+    default: undefined
   },
   street: {
     type: String,

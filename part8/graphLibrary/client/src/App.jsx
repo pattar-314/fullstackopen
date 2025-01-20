@@ -1,26 +1,25 @@
-import { useState } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import NavBar from "./components/NavBar";
+import { Route, Routes } from "react-router";
+import './main.css'
 
 const App = () => {
-  const [page, setPage] = useState("authors");
+  
 
 
 
   return (
     <div>
+      <NavBar />
       <div>
-        <button onClick={() => setPage("authors")}>authors</button>
-        <button onClick={() => setPage("books")}>books</button>
-        <button onClick={() => setPage("add")}>add book</button>
+        <Routes>
+          <Route class='nav-link' path='/books' element={<Books />} />
+          <Route class='nav-link' path='/addBook' element={<NewBook />} />
+          <Route class='nav-link' path='/' element={<Authors />} />
+        </Routes>
       </div>
-
-      <Authors show={page === "authors"} />
-
-      <Books show={page === "books"} />
-
-      <NewBook show={page === "add"} />
     </div>
   );
 };

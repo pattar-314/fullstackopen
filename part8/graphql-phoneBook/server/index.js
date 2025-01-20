@@ -5,6 +5,7 @@ const { default: mongoose } = require('mongoose');
 const { v1: uuid } = require('uuid');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
 
 console.log('connecting to mongodb');
 mongoose
@@ -90,6 +91,7 @@ type Address {
     ): Person
     createUser(
       username: String!
+      password: String!
     ): User
     login(
       username: String!
@@ -167,7 +169,18 @@ const resolvers = {
       return person;
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username });
+      if(!args.username || !args.password){
+        throw new GraphQLError('username and password required', {
+          extensions: {
+            code: 'MISSING_USER_INPUT'
+          }
+        })
+      }
+
+      const encryptedPassword = await bcrypt.hash(args.password, 10)
+      console.log('encryptedPassword: ', encryptedPassword)
+
+      const user = new User({ username: args.username, passwordHash: encryptedPassword });
 
       return user.save().catch((error) => {
         throw new GraphQLError('Creating the user failed', {
@@ -181,8 +194,11 @@ const resolvers = {
     },
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username });
+      console.log('found user: ', user)
 
-      if (!user || args.password !== 'secret') {
+      const doesPasswordMatch = await bcrypt.compare(args.password, user.passwordHash)
+
+      if (!user || !doesPasswordMatch) {
         throw new GraphQLError('wrong credentials', {
           extensions: {
             code: 'BAD_USER_INPUT',
@@ -228,8 +244,10 @@ startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req, res }) => {
     const auth = req ? req.headers.authorization : null
+    console.log('auth: ', auth)
     if(auth && auth.startsWith('Bearer ')){
       const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+      console.log('decoded token: ', decodedToken)
       const currentUser = await User.findById(decodedToken.id).populate('friends')
       return {currentUser}
     }

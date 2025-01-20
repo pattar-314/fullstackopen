@@ -8,6 +8,10 @@ const UserSchema = new mongoose.Schema({
     minLength: 5,
     unique: true
   },
+  passwordHash: {
+    type: String,
+    required: true
+  },
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
