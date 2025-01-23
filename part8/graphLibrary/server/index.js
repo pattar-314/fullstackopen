@@ -10,6 +10,7 @@ console.log('connecting to mongoose')
 mongoose.connect(process.env.MONGODB_URI).then('mongoose connected')
 
 startStandaloneServer(server, {
+  cors: true,
   listen: { port: 4000 },
   context: async ({req, res, next}) => {
     const auth = req ? req.headers.authorization : null

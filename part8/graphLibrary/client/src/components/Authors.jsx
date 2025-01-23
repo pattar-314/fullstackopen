@@ -9,7 +9,7 @@ const NotificationContent = styled.div`
   padding: 1em;
 `;
 
-const Authors = (props) => {
+const Authors = () => {
   const authorQuery = useQuery(GET_ALL_AUTHORS);
   const [editAuthorName, setEditAuthorName] = useState('');
   const [editAuthorBorn, setEditAuthorBorn] = useState('');
@@ -26,10 +26,6 @@ const Authors = (props) => {
       }, 3000);
     },
   });
-
-  if (!props.show) {
-    return null;
-  }  
 
 
   const editAuthor = (e) => {
