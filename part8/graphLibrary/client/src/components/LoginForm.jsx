@@ -28,7 +28,8 @@ const LoginForm = ({setToken, setError}) => {
     if(result.data){
       navigate('/')
       setToken(result.data.login.value)
-      window.localStorage.setItem('graphLibrary-user-info', result.data.login.value)
+      console.log('userdata: ', result.data.login)
+      window.localStorage.setItem('graphLibrary-user-info', result.data.login)
     }
   }, [result.data])
 

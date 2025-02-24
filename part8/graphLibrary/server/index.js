@@ -3,6 +3,7 @@ const { server } = require('./app');
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const User = require('./schemas/User')
 const jwt = require('jsonwebtoken')
+const cors = require('cors')
 
 require('dotenv').config()
 
