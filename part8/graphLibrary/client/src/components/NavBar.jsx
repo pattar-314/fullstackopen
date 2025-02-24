@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import styled from 'styled-components'
 
 
@@ -13,14 +13,24 @@ const NavBarWrapper = styled.div`
   display: flex;
 `
 
+const NavBar = ({setToken, token}) => {
 
+const navigate = useNavigate()
 
-const NavBar = () => {
+const logout = () => {
+  setToken(null)
+  window.localStorage.removeItem('graphLibrary-user-info')
+  navigate('/')
+}
+
   return (
     <NavBarWrapper>
       <StyledLink to="/">authors</StyledLink>
       <StyledLink to="/books">books</StyledLink>
-      <StyledLink to="/addBook">add book</StyledLink>
+      {token ? 
+      <><StyledLink to="/addBook">add book</StyledLink>
+      <StyledLink to='/recommended'>recommended</StyledLink>
+      <button onClick={logout}>logout</button></> : <StyledLink to='/login'>login</StyledLink>}
     </NavBarWrapper>
   )
 }

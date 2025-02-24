@@ -9,7 +9,7 @@ const NotificationContent = styled.div`
   padding: 1em;
 `;
 
-const Authors = () => {
+const Authors = ({ token }) => {
   const authorQuery = useQuery(GET_ALL_AUTHORS);
   const [editAuthorName, setEditAuthorName] = useState('');
   const [editAuthorBorn, setEditAuthorBorn] = useState('');
@@ -70,7 +70,7 @@ const Authors = () => {
           ))}
         </tbody>
       </table>
-      <form onSubmit={editAuthor}>
+      {token ?<form onSubmit={editAuthor}>
         <h2>Update birthyear</h2>
         <select value={editAuthorName} onChange={(e) => setEditAuthorName(e.target.value)}>
           <option key='0' value={-1}>-----------</option>
@@ -79,7 +79,7 @@ const Authors = () => {
         <input
           onChange={(e) => setEditAuthorBorn(Number(e.target.value))} value={editAuthorBorn} placeholder='birth year' />
         <button type='submit'>submit</button>
-      </form>
+      </form> : <></>}
     </div>
   );
 };

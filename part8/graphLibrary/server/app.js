@@ -344,7 +344,7 @@ const resolvers = {
       const isVerified = await bcrypt.compare( args.password, loginUser.passwordHash )
       if(isVerified){
         const token = jwt.sign(loginUser.toJSON(), process.env.JWT_SECRET)
-        return {value: token}
+        return {userInfo: {username: loginUser.username, favoriteGenre: loginUser.favoriteGenre}, value: token}
       } else {
         console.log('verification failed: ', isVerified)
         throw new GraphQLError('login failed', {

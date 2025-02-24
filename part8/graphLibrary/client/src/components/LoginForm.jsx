@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LOGIN } from '../queries'
 import { useMutation } from '@apollo/client'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -10,6 +11,8 @@ const LoginWrapper = styled.div`
 `
 
 const LoginForm = ({setToken, setError}) => {
+
+  const navigate = useNavigate()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -20,15 +23,21 @@ const LoginForm = ({setToken, setError}) => {
     }
   })
 
+
+  useEffect(() => {
+    if(result.data){
+      navigate('/')
+      setToken(result.data.login.value)
+      window.localStorage.setItem('graphLibrary-user-info', result.data.login.value)
+    }
+  }, [result.data])
+
   const login = async (e) => {
     e.preventDefault()
     try {
-      await loginMutation({variables: {username, password}})
-      if(result){
-        console.log('result: ', result.data.login.value)
-        setToken(result.data.login.value)
-        window.localStorage.setItem('graphLibrary-user-token', result.data.login.value)
-      }
+      console.log('trying to log in')
+      loginMutation({variables: {username, password}})
+      
     } catch(error){
       setError('there was an error: ', error)
     }

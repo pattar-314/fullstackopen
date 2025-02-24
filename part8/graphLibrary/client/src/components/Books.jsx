@@ -1,44 +1,114 @@
-import { useQuery } from '@apollo/client'
-import { GET_ALL_BOOKS } from '../queries'
+import { useLazyQuery } from "@apollo/client";
+import { BY_GENRE } from "../queries";
+import styled from "styled-components";
+import { useEffect, useState } from "react";
 
-const Books = () => {
+const GenreList = styled.div`
+  display: flex;
+`;
 
-  const bookQuery = useQuery(GET_ALL_BOOKS)
+const Books = ({ books }) => {
+
+  // const byGenre = useQuery(BY_GENRE)
+  const [genreBookQuery, result] = useLazyQuery(BY_GENRE);
+
+  const [selectedBooks, setSelectedBooks] = useState(books)
+  const [selectedGenre, setSelectedGenre] = useState(null)
+
+  useEffect(() => {
+    if(books.length > 1){
+      console.log('there were books: ', books)
+      setSelectedBooks(books)
+    }
+
+/*     if(byGenre.data){
+      console.log('result data: ', byGenre.data)
+      setSelectedBooks(genreRequest.data.allBooks)
+    }else if(selectedGenre){
+      genreRequest()
+    } */
+
+  }, [books, selectedGenre])
 
 
+  useEffect(() => {
+    if(result.data){
+      const bookData = result.data.allBooks
+      console.log('book data: ', bookData)
+      setSelectedBooks(bookData)
+    }
+  }, [result.data])
 
-console.log('book query: ', bookQuery)
-
-  if(bookQuery.loading){
-    return (
-      <div>loading....</div>
-    )
+  
+  if (books < 1) {
+    return <div>loading...</div>;
   }
 
-  const books = [...bookQuery.data.allBooks]
+  if(result.loading){
+    console.log('loading result: ', result)
+  }
+
+  const genreStepOne = new Set(
+    selectedBooks.reduce(
+      (accumulator, current) => accumulator.concat(current.genres),
+      []
+    )
+  );
+
+
+/*   const genreRequest = async () => {
+    const filteredBooks = byGenre({ variables: { genre: selectedGenre}})
+    console.log('filter test: ', filteredBooks)
+  }
+   */
+
+  const sendQuery = (queryData) => {
+    console.log('sending query:', queryData)
+    setSelectedGenre(queryData)
+    genreBookQuery({variables: {genre: queryData}})
+  }
+
+  console.log('stepOne: ', genreStepOne)
+
+  const genreArray = [...genreStepOne];
+
+  const genreButtons = genreArray.map((b) => (
+    <button key={b} onClick={() => sendQuery(b)}>
+      {b}
+    </button>
+  ))
+
+  const clearFilter = () => {
+    setSelectedBooks(books)
+    setSelectedGenre(null)
+  }
+
+
 
   return (
     <div>
-      <h2>books</h2>
-
       <table>
-        <tbody>
+        <thead>
           <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Published</th>
           </tr>
-          {books.map((a) => (
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
+        </thead>
+        <tbody>
+          {selectedBooks.map((b) => (
+            <tr key={b.id}>
+              <td>{b.title}</td>
+              <td>{b.author.name}</td>
+              <td>{b.published}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      {selectedGenre ? <button onClick={clearFilter}>clear filter</button> : <GenreList>{genreButtons}</GenreList>}
     </div>
-  )
-}
+  );
+};
 
-export default Books
+export default Books;
+//{genreList}
